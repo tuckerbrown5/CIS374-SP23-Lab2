@@ -5,11 +5,29 @@ namespace Lab2
 {
     public class MinHeap<T> where T : IComparable<T>
     {
-        
+        private T[] array;
+        private const int initialSize = 8;
+
+        public int Count { get; private set; }
+
+        public int Capacity => array.Length;
+
+        public bool IsEmpty => Count == 0;
+
+
         public MinHeap(T[] initialArray = null)
         {
+            array = new T[initialSize];
 
+            if (initialArray == null)
+            {
+                return;
+            }
 
+            foreach (var item in initialArray)
+            {
+                Add(item);
+            }
 
         }
 
@@ -19,7 +37,12 @@ namespace Lab2
         /// </summary>
         public T Peek()
         {
+            if (IsEmpty)
+            {
+                throw new Exception("Empty Heap");
+            }
 
+            return array[0];
         }
 
         // TODO
@@ -29,7 +52,19 @@ namespace Lab2
         /// </summary>
         public void Add(T item)
         {
+            int nextEmptyIndex = Count;
 
+            array[nextEmptyIndex] = item;
+
+            TrickleUp(nextEmptyIndex);
+
+            Count++;
+
+            // resize if full
+            if (Count == Capacity)
+            {
+                DoubleArrayCapacity();
+            }
 
         }
 
@@ -41,34 +76,63 @@ namespace Lab2
         // TODO
         /// <summary>
         /// Removes and returns the max item in the min-heap.
-        /// Time complexity: O(?).
+        /// Time complexity: O( N ).
         /// </summary>
         public T ExtractMax()
         {
+            // linear search
 
         }
 
         // TODO
         /// <summary>
         /// Removes and returns the min item in the min-heap.
-        /// Time complexity: O(?).
+        /// Time ctexity: O( log(n) ).
         /// </summary>
         public T ExtractMin()
         {
+            if (IsEmpty)
+            {
+                throw new Exception("Empty Heap");
+            }
 
+            T min = array[0];
+
+            // swap root (first) and last element
+            Swap(0, Count - 1);
+
+            // "remove" last
+            Count--;
+
+            // trickle down from root (first)
+            TrickleDown(0);
+
+            return min;
         }
 
         // TODO
         /// <summary>
         /// Returns true if the heap contains the given value; otherwise false.
-        /// Time complexity: O(N).
+        /// Time complexity: O( N ).
         /// </summary>
         public bool Contains(T value)
         {
+            // linear search
+
+            foreach (var item in array)
+            {
+                if (item.CompareTo(value) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
 
         }
 
         // TODO
+        // Time Complexity: O( log(n) )
         private void TrickleUp(int index)
         {
 
@@ -76,6 +140,7 @@ namespace Lab2
         }
 
         // TODO
+        // Time Complexity: O( log(n) )
         private void TrickleDown(int index)
         {
 
