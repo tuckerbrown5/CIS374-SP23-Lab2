@@ -151,30 +151,35 @@ namespace Lab2
         /// </summary>
         public void Update(T oldValue, T newValue)
         {
-            int index = -1;
-            for (int i = 0; i < Count; i++)
+            if (IsEmpty)
             {
-                if (array[i].Equals(oldValue))
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index == -1)
-            {
-                throw new ArgumentException("Value not found in heap");
-            }
-
-            array[index] = newValue;
-
-            if (index == 0 || array[index].CompareTo(array[Parent(index)]) > 0)
-            {
-                TrickleDown(index);
+                throw new Exception("Empty Heap");
             }
             else
             {
-                TrickleUp(index);
+                if(!Contains(oldValue))
+                {
+                    throw new Exception();
+                }
+                else
+                {
+                    for (int t = 0; t < Count; t++)
+                    {
+                        if (array[t].CompareTo(oldValue) == 0)
+                        {
+                            array[t] = newValue;
+
+                            if (newValue.CompareTo(oldValue) == -1)
+                            {
+                                TrickleUp(t);
+                            }
+                            else
+                            {
+                                TrickleDown(t);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -187,31 +192,21 @@ namespace Lab2
         /// </summary>
         public void Remove(T value)
         {
-            int index = -1;
-            for (int i = 0; i < Count; i++)
+            if (IsEmpty)
             {
-                if (array[i].Equals(value))
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index == -1)
-            {
-                throw new ArgumentException("Value not found in heap");
-            }
-
-            Swap(index, Count - 1);
-            Count--;
-
-            if (index == 0 || array[index].CompareTo(array[Parent(index)]) > 0)
-            {
-                TrickleDown(index);
+                throw new Exception("Empty Heap");
             }
             else
             {
-                TrickleUp(index);
+                for (int t = 0; t < Count; t++)
+                {
+                    if (array[t].CompareTo(value) == 0)
+                    {
+                        array[t] = array[Count - 1];
+                        Count--;
+                        TrickleDown(t);
+                    }
+                }
             }
         }
 

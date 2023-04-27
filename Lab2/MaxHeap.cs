@@ -92,40 +92,56 @@ namespace Lab2
 
         public void Update(T oldValue, T newValue)
         {
-            int index = Array.IndexOf(array, oldValue);
-            if (index < 0)
+            if (IsEmpty)
             {
-                throw new ArgumentException("Old value not found in heap");
-            }
-
-            array[index] = newValue;
-
-            if (newValue.CompareTo(oldValue) > 0)
-            {
-                TrickleUp(index);
+                throw new Exception("Empty Heap");
             }
             else
             {
-                TrickleDown(index);
+                if (!Contains(oldValue))
+                {
+                    throw new Exception();
+                }
+                else
+                {
+                    for (int t = 0; t < Count; t++)
+                    {
+                        if (array[t].CompareTo(oldValue) == 0)
+                        {
+                            array[t] = newValue;
+
+                            if (newValue.CompareTo(oldValue) == 1)
+                            {
+                                TrickleUp(t);
+                            }
+                            else
+                            {
+                                TrickleDown(t);
+                            }
+                        }
+                    }
+                }
             }
         }
 
         public void Remove(T value)
         {
-            int index = Array.IndexOf(array, value);
-            if (index < 0)
+            if (IsEmpty)
             {
-                throw new ArgumentException("Value not found in heap");
+                throw new Exception("Empty Heap");
             }
-
-            // Swap the target element with the last element in the heap
-            Swap(index, Count - 1);
-
-            // Decrement the Count property to exclude the last element
-            Count--;
-
-            // Restore the heap property by trickling down the target element
-            TrickleDown(index);
+            else
+            {
+                for (int t = 0; t < Count; t++)
+                {
+                    if (array[t].CompareTo(value) == 0)
+                    {
+                        array[t] = array[Count - 1];
+                        Count--;
+                        TrickleDown(t);
+                    }
+                }
+            }
         }
 
 
